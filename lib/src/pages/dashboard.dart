@@ -3,19 +3,22 @@ import 'package:flutter/material.dart';
 import 'main/listing.dart';
 import 'main/main.dart';
 class DashboardMain extends StatefulWidget {
-  const DashboardMain({Key? key}) : super(key: key);
+  final Function function;
+  final String eamil;
+  const DashboardMain({Key? key,required this.function,required this.eamil}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<DashboardMain> {
+class _DashboardState extends State<DashboardMain>  {
+
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    MainDashboardSreen(),
-    ListingSection()
+List<Widget> _widgetOptions = <Widget>[
+
 
   ];
 
@@ -23,6 +26,16 @@ class _DashboardState extends State<DashboardMain> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    _widgetOptions=[
+      MainDashboardSreen(function: widget.function,email : widget.eamil),
+      ListingSection()
+    ];
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -39,6 +52,14 @@ class _DashboardState extends State<DashboardMain> {
           padding: const EdgeInsets.only(top: 10),
           child: const Text('Email to SMS',style: TextStyle(color: Colors.black87),),
         ),
+        actions: [
+          Container(
+            padding: const EdgeInsets.only(right: 15,top: 15,bottom: 05),
+            child: InkWell(
+              child:  Image.asset('assets/off.png'),
+            ),
+          )
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
