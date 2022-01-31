@@ -1,4 +1,5 @@
 import 'package:emailforwarder/src/pages/dashboard.dart';
+import 'package:emailforwarder/src/pages/utlis/shared_pref.dart';
 import 'package:emailforwarder/src/widgets/button.dart';
 import 'package:emailforwarder/src/widgets/textfield.dart';
 import 'package:enough_mail/discover/discover.dart';
@@ -20,6 +21,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  SharedPref pref=SharedPref();
 
   TextEditingController controller= TextEditingController();
   TextEditingController pasword= TextEditingController();
@@ -32,6 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String mailshow='';
 
   void emailUpdate(String mail){
+
+    pref.saveObject('emailSaved', mail);
     setState(() {
       mailsender=mail;
       mailshow=mail;
@@ -105,6 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await mailClient.connect();
       EasyLoading.showToast('Successfully Logged In',toastPosition: EasyLoadingToastPosition.bottom);
+      await mailClient.startPolling();
+      pref.saveObject('user', controller.text);
+      pref.saveObject('password', pasword.text);
       final mailboxes =
        await mailClient.listMailboxesAsTree(createIntermediate: false);
       //print(mailboxes);
@@ -122,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
         sendSMSTONmber(mymessage,myphone,mailClient);
 
       });
-      await mailClient.startPolling();
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>  DashboardMain(function: emailUpdate,eamil: mailshow,)),

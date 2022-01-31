@@ -1,3 +1,5 @@
+import 'package:emailforwarder/src/pages/auth/login.dart';
+import 'package:emailforwarder/src/pages/utlis/shared_pref.dart';
 import 'package:flutter/material.dart';
 
 import 'main/listing.dart';
@@ -15,6 +17,7 @@ class _DashboardState extends State<DashboardMain>  {
 
 
   int _selectedIndex = 0;
+  PageController? _pageController;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 List<Widget> _widgetOptions = <Widget>[
@@ -22,14 +25,29 @@ List<Widget> _widgetOptions = <Widget>[
 
   ];
 
+  onlogout(){
+    SharedPref pref=SharedPref();
+    pref.remove('user');
+    pref.remove('password');
+    pref.remove('emailSaved');
+
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+        LoginScreen()), (Route<dynamic> route) => false);
+  }
+
   void _onItemTapped(int index) {
+    print("this is index+  "+ index.toString());
     setState(() {
       _selectedIndex = index;
+      _pageController?.jumpToPage(index);
+
     });
   }
 
   @override
   void initState() {
+    _pageController = PageController(initialPage: _selectedIndex);
+
     _widgetOptions=[
       MainDashboardSreen(function: widget.function,email : widget.eamil),
       ListingSection()
@@ -53,16 +71,21 @@ List<Widget> _widgetOptions = <Widget>[
           child: const Text('Email to SMS',style: TextStyle(color: Colors.black87),),
         ),
         actions: [
-          Container(
-            padding: const EdgeInsets.only(right: 15,top: 15,bottom: 05),
-            child: InkWell(
-              child:  Image.asset('assets/off.png'),
+          InkWell(
+            onTap: onlogout,
+            child: Container(
+              padding: const EdgeInsets.only(right: 15,top: 15,bottom: 05),
+              child: InkWell(
+                child:  Image.asset('assets/off.png'),
+              ),
             ),
           )
         ],
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: PageView(
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+        children: _widgetOptions,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
