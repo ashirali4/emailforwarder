@@ -1,6 +1,7 @@
 import 'package:emailforwarder/src/pages/auth/login.dart';
 import 'package:emailforwarder/src/pages/utlis/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../provider.dart';
@@ -27,15 +28,9 @@ List<Widget> _widgetOptions = <Widget>[
 
 
   ];
-
-  onlogout(){
-    SharedPref pref=SharedPref();
-    pref.remove('user');
-    pref.remove('password');
-    pref.remove('emailSaved');
-
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-        LoginScreen()), (Route<dynamic> route) => false);
+  var _authModel;
+  onlogout() async {
+    SystemNavigator.pop();
   }
 
   void _onItemTapped(int index) {
@@ -49,7 +44,7 @@ List<Widget> _widgetOptions = <Widget>[
 
   @override
   void initState() {
-    var _authModel = Provider.of<AuthModel>(context, listen: false);
+    _authModel = Provider.of<AuthModel>(context, listen: false);
     _pageController = PageController(initialPage: _selectedIndex);
 
     _widgetOptions=[

@@ -147,7 +147,7 @@ class AuthModel with ChangeNotifier {
       MailAccount.fromManualSettings('ASHIR', myEmail, imapServer, imapServer, myPassword);
     }
 
-    mailClient= MailClient(acc, isLogEnabled: true);
+    mailClient= MailClient(acc, isLogEnabled: true,onBadCertificate: (dd){return true;});
     try {
       await mailClient?.connect();
       EasyLoading.showToast('Successfully Logged In',toastPosition: EasyLoadingToastPosition.bottom);
@@ -169,7 +169,7 @@ class AuthModel with ChangeNotifier {
     } catch(e){
       EasyLoading.dismiss();
       print("Manual Connection");
-      EasyLoading.showToast('Error: $e',toastPosition: EasyLoadingToastPosition.bottom);
+      EasyLoading.showToast('Try Manual Configurations');
       //manualHostLogin(imapServer,imapport,isSecure,myEmail,myPassword);
     }
     return status;

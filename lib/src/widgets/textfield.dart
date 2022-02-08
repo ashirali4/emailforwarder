@@ -12,6 +12,8 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
       child: TextField(
+        autocorrect: false,
+        enableSuggestions: false,
         style: TextStyle(
           fontSize: 12
         ),

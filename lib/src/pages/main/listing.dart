@@ -155,6 +155,7 @@ class _ListingSectionState extends State<ListingSection> {
                         await _authModel!.logOut();
                       }else{
                         if(emailCn!=null && emailCn.text!='' && passwordCn!=null && passwordCn.text!=''){
+                          await _authModel!.saveManualConfigurations(imapserver.text,port.text,isSecure);
                           await _authModel!.saveLogin(emailCn.text,passwordCn.text,true);
                         }else{
                           EasyLoading.showToast('Enter Email & Password ',toastPosition: EasyLoadingToastPosition.bottom);
