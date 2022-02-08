@@ -1,7 +1,10 @@
 import 'package:emailforwarder/src/pages/auth/login.dart';
 import 'package:emailforwarder/src/pages/utlis/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../provider.dart';
+import 'main/help.dart';
 import 'main/listing.dart';
 import 'main/main.dart';
 class DashboardMain extends StatefulWidget {
@@ -46,10 +49,12 @@ List<Widget> _widgetOptions = <Widget>[
 
   @override
   void initState() {
+    var _authModel = Provider.of<AuthModel>(context, listen: false);
     _pageController = PageController(initialPage: _selectedIndex);
 
     _widgetOptions=[
       MainDashboardSreen(function: widget.function,email : widget.eamil),
+      HelpScreen(),
       ListingSection()
     ];
     // TODO: implement initState
@@ -94,8 +99,12 @@ List<Widget> _widgetOptions = <Widget>[
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
+            icon: Icon(Icons.help),
+            label: 'Help',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
 
         ],

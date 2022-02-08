@@ -1,6 +1,7 @@
 import 'package:emailforwarder/src/pages/auth/login.dart';
 import 'package:emailforwarder/src/pages/dashboard.dart';
 import 'package:emailforwarder/src/pages/utlis/shared_pref.dart';
+import 'package:emailforwarder/src/provider.dart';
 import 'package:enough_mail/discover/discover.dart';
 import 'package:enough_mail/mail/mail_account.dart';
 import 'package:enough_mail/mail/mail_client.dart';
@@ -12,6 +13,7 @@ import 'package:enough_mail/mime_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:telephony/telephony.dart';
 MimeMessage? completeMimeMessage;
 final telephony = Telephony.instance;
@@ -31,9 +33,9 @@ Future<void> main() async {
   print("username -- >"+username.toString());
   bool isloggedin=false;
   if(username.toString()!=''){
-    isloggedin= await mailExample(
-      username.toString(),password.toString(),email.toString()
-    );
+    // isloggedin= await mailExample(
+    //   username.toString(),password.toString(),email.toString()
+    // );
     print("this isss "+isloggedin.toString());
     runApp(MyApp(email: email.toString(),isLogggedIn: isloggedin,));
   }else{
@@ -56,17 +58,24 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'EmailToSMS',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context).textTheme,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthModel>(
+            create: (context) => AuthModel()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'EmailToSMS',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.poppinsTextTheme(
+            Theme.of(context).textTheme,
+          ),
         ),
+       // home: isLogggedIn ? DashboardMain(function: emailUpdate,eamil: email,)  : LoginScreen(),
+        home: DashboardMain(function: emailUpdate,eamil: email,) ,
+        builder: EasyLoading.init(),
       ),
-      home: isLogggedIn ? DashboardMain(function: emailUpdate,eamil: email,)  : LoginScreen(),
-      builder: EasyLoading.init(),
     );
   }
 }

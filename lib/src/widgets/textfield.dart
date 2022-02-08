@@ -12,6 +12,9 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
       child: TextField(
+        style: TextStyle(
+          fontSize: 12
+        ),
         controller: this.controller,
         obscureText: this.isPassword,
         decoration:  InputDecoration(
